@@ -1,67 +1,69 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[5]:
-
-
-# Creating the path file 
-import os
-# Reading the CSV files
 import csv
-# Setting a path for the  file
-input_file= os.path.join('Resources','election_data.csv')
+import os
+csvpath =os.path.join( "Resources","election_data.csv")
+print(csvpath)
+output_file= os.path.join( "analysis","election_analysis.txt")
 
-# Opening the CSV
-with open(os.path) as election_data:
-
-    # CSV reader specifiing the delimiter and variable that holds contents within the file
-    csvreader = csv.reader(csvfile, delimiter=',')
-
-    # Reading the first row (header)
-    csv_header = next(csvreader)
-
-    candidate_list = [candidate[2] for candidate in csvreader]
-    
-# Calculating the number of total votes
-total_votes = len(candidate_list)
-
-# Creating a unique list of the candidates with the corresponding number of votes
-canditates_info = [[candidate,candidate_list.count(candidate)] for candidate in set(candidate_list)]
-
-# Sorting the list so that the first candidate becomes the winner 
-canditates_info = sorted(canditates_info, key=lambda x: x[1], reverse=True)
-
-# Printing the election results
-print("Election Results")
-print("-------------------------")
-print(f"Total Votes: {total_votes}")
-print("-------------------------")
-
-for candidate in canditates_info:
-    percent_votes = (candidate[1] / total_votes) * 100
-    print(f'{candidate[0]}: {percent_votes:6.3f}% ({candidate[1]})')
-
-print("-------------------------")
-print(f"Winner: {canditates_info[0][0]}")
-print("-------------------------")
+#variables
+total_vote_cast = 0
+canditates_voteslist=[] #empty list
+totalvotes_each_cand={}#emty dictionary
+winner_count=0
+winner_candidate=""
 
 
-#  Printing the  election results to text file 
-# Set path for file
-filepath = os.path.join('.', 'Resources', 'PyPoll_Results.txt')
-with open(filepath, "w") as text_file:
-    print("Election Results", file=text_file)
-    print("-------------------------", file=text_file)
-    print(f"Total Votes: {total_votes}", file=text_file)
-    print("-------------------------", file=text_file)
+#code to read the data in the file
+with open(csvpath, mode ="r", encoding="utf-8") as csvfile:
 
-    for candidate in canditates_info:
-        percent_votes = (candidate[1] / total_votes) * 100
-        print(f'{candidate[0]}: {percent_votes:6.3f}% ({candidate[1]})', file=text_file)
+     # Store the contents of budget_data.csv in the variable csvreader
+    csvpath = csv.reader(csvfile, delimiter=",") 
 
-    print("-------------------------", file=text_file)
-    print(f"Winner: {canditates_info[0][0]}", file=text_file)
-    print("-------------------------", file=text_file)
+    #read the head row
+    header = next(csvreader)
+    #read the first row
+    firstdatarow= next(csvreader)
+
+    for row in csvreader:
+        # add the count of the total months
+        total_vote_cast = total_vote_cast+1
+        candidate_name= row[2]
+        if candidate_name not in canditates_voteslist:
+            #add the candidate to the list
+            canditates_voteslist.append(candidate_name)
+            #add value to dictionary
+            totalvotes_each_cand[candidate_name]=0
+        totalvotes_each_cand[candidate_name]+=1
+
+    else:
+        totalvotes_each_cand[row[2]]+=1
+
+    for cand in totalvotes_each_cand:
+        votes = totalvotes_each_cand.get(cand)
 
 
-# In[ ]:
+        percent_each_candidate = float(votes) / (total_vote_cast)*100.00
+        if (votes>winner_count):
+            winner_count=votes
+            winner_candidate=cand
+
+   # output
+    output =(
+    f"--------------------------\n"
+    f"election results\n"
+    f"--------------------------\n"
+    f"total number of votes cast= {total_vote_cast }\n"
+    f"--------------------------\n"
+    f"candidates votes list= ${canditates_voteslist}\n"
+     f"--------------------------\n"
+    f"percentage of each candidate= ${ percent_each_candidate:.2f}\n"
+    f"--------------------------\n"
+    f"winner= {winner_candidate}\n"
+    f"--------------------------\n"
+    f"total number of votes each candidate won= {totalvotes_each_cand}\n"
+    f"--------------------------\n")
+
+
+    print (output)
+
+    with open(output_file,"w") as txt:
+         txt.write(output)
