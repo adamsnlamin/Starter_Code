@@ -13,7 +13,7 @@ winner_candidate=""
 
 
 #code to read the data in the file
-with open(csvpath, mode ="r", encoding="utf-8") as csvfile:
+with open(csvpath, mode ="r", encoding="UTF-8") as csvfile:
 
      # Store the contents of budget_data.csv in the variable csvreader
     csvpath = csv.reader(csvfile, delimiter=",") 
@@ -33,6 +33,7 @@ with open(csvpath, mode ="r", encoding="utf-8") as csvfile:
             #add value to dictionary
             totalvotes_each_cand[candidate_name]=0
         totalvotes_each_cand[candidate_name]+=1
+        
 
     else:
         totalvotes_each_cand[row[2]]+=1
