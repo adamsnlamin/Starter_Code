@@ -1,6 +1,6 @@
 import csv
 import os
-csvpath =os.path.join( "Resources","election_data.csv")
+csvpath =os.path.join("Resources","election_data.csv")
 print(csvpath)
 output_file= os.path.join( "analysis","election_analysis.txt")
 
@@ -16,7 +16,7 @@ winner_candidate=""
 with open(csvpath, mode ="r", encoding="UTF-8") as csvfile:
 
      # Store the contents of budget_data.csv in the variable csvreader
-    csvpath = csv.reader(csvfile, delimiter=",") 
+    csvreader= csv.reader(csvfile, delimiter=",") 
 
     #read the head row
     header = next(csvreader)
