@@ -12,7 +12,7 @@ import csv
 input_file= os.path.join('Resources','election_data.csv')
 
 # Opening the CSV
-with open(filepath, newline='') as csvfile:
+with open(os.path) as election_data:
 
     # CSV reader specifiing the delimiter and variable that holds contents within the file
     csvreader = csv.reader(csvfile, delimiter=',')
